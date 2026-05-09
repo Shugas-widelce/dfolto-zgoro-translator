@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tłumacz Twardoskalny</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;500&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0d0b08;
+    color: #c9b89a;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .logo {
+    font-family: 'Cinzel', serif;
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: #e8d5b0;
+    letter-spacing: 4px;
+    text-shadow: 0 0 30px #7a5c2e88;
+  }
+
+  .logo span { color: #b87333; }
+
+  .subtitle {
+    font-size: 0.78rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #7a6a52;
+    margin-top: 6px;
+  }
+
+  .divider {
+    width: 180px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #b87333, transparent);
+    margin: 14px auto 0;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 720px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .panel {
+    background: #131109;
+    border: 1px solid #2e2518;
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .panel-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #7a6a52;
+    margin-bottom: 10px;
+  }
+
+  textarea {
+    width: 100%;
+    background: #0d0b08;
+    border: 1px solid #2e2518;
+    border-radius: 8px;
+    color: #e8d5b0;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    padding: 14px;
+    resize: vertical;
+    min-height: 90px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  textarea:focus { border-color: #b87333; }
+  textarea::placeholder { color: #3a3020; }
+
+  .btn {
+    display: block;
+    width: 100%;
+    margin-top: 14px;
+    padding: 13px;
+    background: linear-gradient(135deg, #7a4f1a, #b87333);
+    border: none;
+    border-radius: 8px;
+    color: #f5e8d0;
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+  }
+
+  .btn:hover { opacity: 0.88; }
+  .btn:active { transform: scale(0.98); }
+
+  .result-box {
+    background: #0d0b08;
+    border: 1px solid #2e2518;
+    border-radius: 8px;
+    padding: 18px;
+    min-height: 70px;
+  }
+
+  .result-text {
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    color: #e8d5b0;
+    letter-spacing: 2px;
+    word-break: break-all;
+    text-shadow: 0 0 20px #b8733355;
+    line-height: 1.5;
+  }
+
+  .result-text.empty { color: #2e2518; font-size: 1rem; font-family: 'Inter', sans-serif; letter-spacing: 0; }
+
+  /* Steps */
+  .steps-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    color: #7a6a52;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Cinzel', serif;
+    margin-top: 18px;
+    padding: 10px 0;
+    border-top: 1px solid #1e1810;
+  }
+
+  .steps-toggle .arrow {
+    transition: transform 0.2s;
+    display: inline-block;
+  }
+
+  .steps-toggle.open .arrow { transform: rotate(90deg); }
+
+  .steps-list {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .steps-list.visible { display: flex; }
+
+  .step {
+    background: #0d0b08;
+    border-left: 3px solid #2e2518;
+    border-radius: 0 6px 6px 0;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  .step.active { border-left-color: #b87333; }
+
+  .step-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    color: #7a6a52;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .step-value {
+    color: #c9b89a;
+    word-break: break-all;
+    font-size: 0.95rem;
+  }
+
+  .rune { color: #b87333; }
+
+  footer {
+    margin-top: 40px;
+    color: #3a3020;
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🪨 <span>TWARDOSKALNY</span></div>
+  <div class="subtitle">Tłumacz języka wtajemniczonych</div>
+  <div class="divider"></div>
+</header>
+
+<div class="container">
+  <div class="panel">
+    <div class="panel-label">🇵🇱 Język polski</div>
+    <textarea id="input" placeholder="Wpisz polskie słowo lub zdanie..."></textarea>
+    <button class="btn" id="translateBtn">⚙ PRZETŁUMACZ</button>
+  </div>
+
+  <div class="panel">
+    <div class="panel-label">🪨 Twardoskalny</div>
+    <div class="result-box">
+      <div class="result-text empty" id="result">— wynik pojawi się tutaj —</div>
+    </div>
+
+    <div class="steps-toggle" id="toggle" onclick="toggleSteps()">
+      <span class="arrow">▶</span> Kroki pośrednie
+    </div>
+
+    <div class="steps-list" id="steps">
+      <div class="step" id="s0">
+        <div class="step-title">Krok 0 — Wejście</div>
+        <div class="step-value" id="s0v">—</div>
+      </div>
+      <div class="step" id="s1">
+        <div class="step-title">Krok 1 — Dwuznaki (sz→sz, cz→cz, rz→rz, ch→h)</div>
+        <div class="step-value" id="s1v">—</div>
+      </div>
+      <div class="step" id="s2">
+        <div class="step-title">Krok 2 — Usunięcie podwojonych liter</div>
+        <div class="step-value" id="s2v">—</div>
+      </div>
+      <div class="step" id="s3">
+        <div class="step-title">Krok 3 — Podstawienie liter (szyfr)</div>
+        <div class="step-value" id="s3v">—</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>🪨 Twardoskalny — język fikcyjny · jednokierunkowy · niskoodwracalny</footer>
+
+<script>
+  const map = {
+    a:'o', b:'p', c:'k', d:'t', e:'i', f:'w', g:'k', h:'h',
+    i:'y', j:'y', k:'g', l:'r', m:'n', n:'m', o:'a', p:'b',
+    r:'l', s:'z', t:'d', u:'y', w:'f', y:'i', z:'s',
+    // polskie znaki
+    ą:'o', ę:'i', ó:'a', ń:'m', ś:'z', ź:'s', ż:'s',
+    ł:'r', ć:'k', ź:'s'
+  };
+
+  function step1(s) {
+    // sz → s, cz → c, rz → r (odrzucamy z), ch → h
+    return s
+      .replace(/sz/gi, m => m[0] === m[0].toUpperCase() ? 'S' : 's')
+      .replace(/cz/gi, m => m[0] === m[0].toUpperCase() ? 'C' : 'c')
+      .replace(/rz/gi, m => m[0] === m[0].toUpperCase() ? 'R' : 'r')
+      .replace(/ch/gi, m => m[0] === m[0].toUpperCase() ? 'H' : 'h');
+  }
+
+  function step2(s) {
+    // Remove doubled letters
+    return s.replace(/(.)\1+/gi, '$1');
+  }
+
+  function step3(s) {
+    return s.split('').map(ch => {
+      const lo = ch.toLowerCase();
+      if (map[lo] !== undefined) {
+        const res = map[lo];
+        return ch === ch.toUpperCase() && ch !== ch.toLowerCase()
+          ? res.toUpperCase() : res;
+      }
+      return ch;
+    }).join('');
+  }
+
+  function translate() {
+    const raw = document.getElementById('input').value.trim();
+    if (!raw) return;
+
+    const v0 = raw;
+    const v1 = step1(raw.toLowerCase()); // work lowercase for display clarity
+    const v2 = step2(v1);
+    const v3 = step3(v2);
+
+    document.getElementById('s0v').textContent = v0;
+    document.getElementById('s1v').textContent = v1;
+    document.getElementById('s2v').textContent = v2;
+    document.getElementById('s3v').textContent = v3;
+
+    // Mark steps that changed
+    ['s1','s2','s3'].forEach((id, i) => {
+      const prev = [v0.toLowerCase(), v1, v2][i];
+      const curr = [v1, v2, v3][i];
+      document.getElementById(id).className = 'step' + (prev !== curr ? ' active' : '');
+    });
+
+    const resultEl = document.getElementById('result');
+    resultEl.textContent = v3;
+    resultEl.className = 'result-text';
+  }
+
+  function toggleSteps() {
+    const toggle = document.getElementById('toggle');
+  toggle.addEventListener('click', toggleSteps);
+    toggle.classList.toggle('open');
+    steps.classList.toggle('visible');
+  }
+
+  document.getElementById('translateBtn').addEventListener('click', translate);
+  document.getElementById('input').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); translate(); }
+  });
+</script>
+</body>
+</html>
